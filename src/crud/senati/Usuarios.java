@@ -4,7 +4,9 @@
  */
 package crud.senati;
 import java.sql.*;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 /**
 /**
  *
@@ -22,11 +24,11 @@ public class Usuarios extends javax.swing.JFrame {
     }
     
      public void cargarUsuarios(){
-         System.out.println("cargar usurio");
+         System.out.println("cargar usuario");
          Conexion cn=  new Conexion();
          cn.conectar();
          
-         String query= "SELECT *FROM Usurio";
+         String query= "SELECT *FROM usuario";
           
          try{
              Statement st=null;
@@ -51,7 +53,7 @@ public class Usuarios extends javax.swing.JFrame {
               }
           
               
-              tblUsuarios.setModel(model); 
+              tblusuarios.setModel(model); 
          } catch(SQLException e){
                    System.out.println(e);
                   
@@ -69,18 +71,25 @@ public class Usuarios extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblUsuarios = new javax.swing.JTable();
+        tblusuarios = new javax.swing.JTable();
         btnAgregar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Comic Sans MS", 1, 24)); // NOI18N
         jLabel1.setText("Formulario  de Usuarios");
 
-        tblUsuarios.setModel(new javax.swing.table.DefaultTableModel(
+        tblusuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -91,13 +100,28 @@ public class Usuarios extends javax.swing.JFrame {
                 "id", "name", "lastname"
             }
         ));
-        jScrollPane1.setViewportView(tblUsuarios);
+        jScrollPane1.setViewportView(tblusuarios);
 
         btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnSalir.setText("Salir");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -161,6 +185,61 @@ public class Usuarios extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+      if(tblusuarios.getSelectedRow()>-1){
+           int option=JOptionPane.showConfirmDialog(null, "¿estas seguro de eliminar?","eliminar" 
+                   ,JOptionPane.OK_OPTION,JOptionPane.CANCEL_OPTION);
+        if(option==0){
+           TableModel modelo =tblusuarios.getModel();
+       Conexion cn=new Conexion();
+        String id= modelo.getValueAt(tblusuarios.getSelectedRow(),0).toString();
+        String query="DELETE  FROM usurios WHERE id=?";
+          try{
+              PreparedStatement ps=cn .conectar().prepareStatement(query);
+              ps.setInt(1,Integer.parseInt(id));
+               ps.execute();
+                 } catch(SQLException e){
+                     System.out.println(e);
+               
+
+            }
+        }
+      }
+       
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+    AgregarUsuario formAdd=new AgregarUsuario();
+    formAdd.setVisible(true);
+       
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+      if(tblusuarios.getSelectedRow()>-1){
+      TableModel modelo =tblusuarios.getModel();
+         
+        String id= modelo.getValueAt(tblusuarios.getSelectedRow(),0).toString();
+        String name= modelo.getValueAt(tblusuarios.getSelectedRow(),1).toString();
+        String lastname= modelo.getValueAt(tblusuarios.getSelectedRow(),2).toString();
+        
+        
+        
+        
+         EditarUsuario formUpd= new EditarUsuario(id, name,lastname);
+       formUpd.setVisible(true);
+      }else{
+          JOptionPane.showMessageDialog(null, "HEY Selecciona un registro");
+      }
+        
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+     
+        cargarUsuarios();
+        
+            
+    }//GEN-LAST:event_formWindowGainedFocus
+
     /**
      * @param args the command line arguments
      */
@@ -203,6 +282,6 @@ public class Usuarios extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblUsuarios;
+    private javax.swing.JTable tblusuarios;
     // End of variables declaration//GEN-END:variables
 }
