@@ -48,6 +48,11 @@ public class AgregarProducto extends javax.swing.JPanel {
         });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(153, 0, 153));
@@ -145,7 +150,7 @@ public class AgregarProducto extends javax.swing.JPanel {
       System.out.println("SE INSERTO A REGISTRO");
 
     }
-  dispose();
+    dispose();
     } catch (SQLException e){
 
      System.out.println(e);
@@ -153,6 +158,12 @@ public class AgregarProducto extends javax.swing.JPanel {
     }
         
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        dispose();
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnCancelarActionPerformed
+                                 
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package crud.senati;
-
+import java.sql.*;
 /**
  *
  * @author beatr
@@ -64,6 +64,11 @@ public class EditarProducto extends javax.swing.JFrame {
         jLabel4.setText("Marca:");
 
         btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -135,6 +140,45 @@ public class EditarProducto extends javax.swing.JFrame {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        // TODO add your handling code here:
+            Conexion cn = new Conexion();
+
+        String query = "UPDATE producto SET nombre_Producto =?,Marca=? WHERE id_producto =? ";
+
+        int id_producto= Integer.parseInt(txtProducto.getText());
+
+        String  nombre_Producto = txtNombre.getText();
+
+        String Marca = txtMarca.getText();
+
+        try {
+
+            PreparedStatement ps = cn.conectar().prepareStatement(query);
+
+            ps.setString(1,nombre_Producto );
+
+            ps.setString(2, Marca);
+
+            ps.setInt(3,id_producto);
+
+            if (ps.execute()) {
+
+                System.out.println("el registro fuer correcto");
+
+            }
+
+            dispose();
+
+        } catch (SQLException e) {
+
+            System.out.println(e);
+
+        }
+
+          
+    }//GEN-LAST:event_btnActualizarActionPerformed
 
     /**
      * @param args the command line arguments
