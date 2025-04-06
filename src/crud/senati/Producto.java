@@ -4,6 +4,12 @@
  */
 package crud.senati;
 
+import java.sql.*;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+
 /**
  *
  * @author beatr
@@ -15,7 +21,44 @@ public class Producto extends javax.swing.JFrame {
      */
     public Producto() {
         initComponents();
+        cargarProducto();
     }
+public void cargarProducto(){
+         System.out.println("cargar Producto");
+         Conexion cn=  new Conexion();
+         cn.conectar();
+         
+         String query= "SELECT *FROM producto";
+          
+         try{
+             Statement st=null;
+             st = cn.conectar().createStatement();
+             ResultSet rs=st.executeQuery(query);
+             if (rs !=null){
+                 System.out.println("el dato fue cargado");
+                 
+             }
+             String[] headers ={"id_Producto","nombre_Producto","Marca"};
+             DefaultTableModel model=new DefaultTableModel(headers,0);
+            
+             
+              while (rs.next()){
+                 Object[]row={
+                     rs.getInt("id_Producto"),
+                     rs.getString("nombre_Producto"),
+                     rs.getString("Marca"),
+                     
+                 };
+                  model .addRow(row);
+              }
+          
+              
+              tlbProducto.setModel(model); 
+         } catch(SQLException e){
+                   System.out.println(e);
+                  
+                  }
+     }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,7 +77,7 @@ public class Producto extends javax.swing.JFrame {
         btnAgregar = new javax.swing.JButton();
         btnsalir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tlbProductos = new javax.swing.JTable();
+        tlbProducto = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,13 +90,23 @@ public class Producto extends javax.swing.JFrame {
         btnEditar.setText("Editar");
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnAgregar.setText("Agregar");
 
         btnsalir.setText("Salir");
+        btnsalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnsalirActionPerformed(evt);
+            }
+        });
 
-        tlbProductos.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        tlbProductos.setModel(new javax.swing.table.DefaultTableModel(
+        tlbProducto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        tlbProducto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -64,7 +117,7 @@ public class Producto extends javax.swing.JFrame {
                 "id_Producto", "nombre_Producto", "marca"
             }
         ));
-        jScrollPane1.setViewportView(tlbProductos);
+        jScrollPane1.setViewportView(tlbProducto);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -137,6 +190,37 @@ public class Producto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsalirActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btnsalirActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+       
+       // TODO add your handling code here:
+       if(tlbProducto.getSelectedRow()>-1){
+           int option=JOptionPane.showConfirmDialog(null, "¿estas seguro de eliminar?","eliminar" 
+                   ,JOptionPane.OK_OPTION,JOptionPane.CANCEL_OPTION);
+        if(option==0){
+           TableModel modelo =tlbProducto.getModel();
+       Conexion cn=new Conexion();
+        String id_Producto= modelo.getValueAt(tlbProducto.getSelectedRow(),0).toString();
+        String query="DELETE  FROM producto WHERE id_Producto=?";
+          try{
+              PreparedStatement ps=cn .conectar().prepareStatement(query);
+              ps.setInt(1,Integer.parseInt(id_Producto));
+               ps.execute();
+                 } catch(SQLException e){
+                     System.out.println(e);
+               
+
+            }
+        }
+      }
+       
+      
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -181,6 +265,6 @@ public class Producto extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tlbProductos;
+    private javax.swing.JTable tlbProducto;
     // End of variables declaration//GEN-END:variables
 }

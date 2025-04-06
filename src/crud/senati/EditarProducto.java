@@ -16,6 +16,13 @@ public class EditarProducto extends javax.swing.JFrame {
     public EditarProducto() {
         initComponents();
     }
+    public EditarProducto(String id_Producto, String nombre_Producto, String Marca) {
+        initComponents();
+        txtProducto.setText(id_Producto);
+        txtNombre.setText(nombre_Producto);
+        txtMarca.setText(Marca);
+
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -59,6 +66,11 @@ public class EditarProducto extends javax.swing.JFrame {
         btnActualizar.setText("Actualizar");
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -118,6 +130,11 @@ public class EditarProducto extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
